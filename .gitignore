@@ -73,6 +73,7 @@ coverage/
 *.tmp
 .supabase/
 node_modules/
+<<<<<<< HEAD
 
 # Android signing secrets
 **/key.properties
@@ -81,3 +82,5 @@ node_modules/
 # Android signing secrets
 **/key.properties
 **/*.jks
+=======
+>>>>>>> origin/main

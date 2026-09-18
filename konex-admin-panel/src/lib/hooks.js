@@ -451,6 +451,7 @@ export async function reviewJoinRequest(squadId, userId, approve, reason = null)
   if (error) throw error;
 }
 
+<<<<<<< HEAD
 // ---------- community members ----------
 export async function fetchCommunityMembers(communityId, { query = null, limit = 100, offset = 0 } = {}) {
   const { data, error } = await supabase.rpc("admin_list_community_members", {
@@ -668,6 +669,8 @@ export async function globalSearch(query) {
   };
 }
 
+=======
+>>>>>>> origin/main
 export async function updateSquadSettings(squadId, patch, reason = null) {
   const { error } = await supabase.rpc("admin_update_squad_settings", {
     p_squad_id: squadId,

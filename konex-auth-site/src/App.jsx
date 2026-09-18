@@ -1,7 +1,10 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Landing from './pages/Landing'
 import About from './pages/About'
+<<<<<<< HEAD
 import Privacy from './pages/Privacy'
+=======
+>>>>>>> origin/main
 import AuthCallback from './pages/AuthCallback'
 import DeepLink from './pages/DeepLink'
 
@@ -11,7 +14,10 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/about" element={<About />} />
+<<<<<<< HEAD
         <Route path="/privacy" element={<Privacy />} />
+=======
+>>>>>>> origin/main
         {/* Point your Supabase project's "Site URL" / redirect URL at this route,
             e.g. https://konex-app-rho.vercel.app/auth/callback */}
         <Route path="/auth/callback" element={<AuthCallback />} />

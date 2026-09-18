@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
+<<<<<<< HEAD
 import { Link, useNavigate, useParams } from "react-router-dom";
+=======
+import { useNavigate, useParams } from "react-router-dom";
+>>>>>>> origin/main
 import { useToast } from "../components/Toast";
 import { supabase } from "../supabaseClient";
 import { createGame, updateGame, uploadLogo } from "../lib/hooks";
@@ -109,11 +113,14 @@ export default function GameForm() {
             {isEdit ? "Update this game/community." : "Game = Community, created in one step."}
           </p>
         </div>
+<<<<<<< HEAD
         {isEdit && (
           <Link to={`/games/${id}/members`} className="btn btn-ghost">
             View members
           </Link>
         )}
+=======
+>>>>>>> origin/main
       </div>
 
       {error && <div className="error-banner">{error}</div>}

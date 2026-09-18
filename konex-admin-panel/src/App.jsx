@@ -10,11 +10,15 @@ import Staff from "./pages/Staff";
 import Squads from "./pages/Squads";
 import Games from "./pages/Games";
 import GameForm from "./pages/GameForm";
+<<<<<<< HEAD
 import GameMembers from "./pages/GameMembers";
 import Audit from "./pages/Audit";
 import Appeals from "./pages/Appeals";
 import Analytics from "./pages/Analytics";
 import Settings from "./pages/Settings";
+=======
+import Audit from "./pages/Audit";
+>>>>>>> origin/main
 
 export default function App() {
   return (
@@ -37,11 +41,15 @@ export default function App() {
             <Route path="/games" element={<Games />} />
             <Route path="/games/new" element={<GameForm />} />
             <Route path="/games/:id" element={<GameForm />} />
+<<<<<<< HEAD
             <Route path="/games/:id/members" element={<GameMembers />} />
             <Route path="/audit" element={<Audit />} />
             <Route path="/appeals" element={<Appeals />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/settings" element={<Settings />} />
+=======
+            <Route path="/audit" element={<Audit />} />
+>>>>>>> origin/main
           </Route>
         </Routes>
       </AuthProvider>

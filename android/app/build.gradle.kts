@@ -1,6 +1,9 @@
+<<<<<<< HEAD
 import java.util.Properties
 import java.io.FileInputStream
 
+=======
+>>>>>>> origin/main
 plugins {
     id("com.android.application")
     id("dev.flutter.flutter-gradle-plugin")
@@ -10,6 +13,7 @@ if (file("google-services.json").exists()) {
     apply(plugin = "com.google.gms.google-services")
 }
 
+<<<<<<< HEAD
 // Release signing comes from key.properties, which is never committed —
 // see .gitignore. Locally, create it yourself next to this file:
 //   storeFile=/absolute/path/to/konex-upload-keystore.jks
@@ -26,12 +30,20 @@ if (hasReleaseSigning) {
 
 android {
     namespace = "com.konex.app"
+=======
+android {
+    namespace = "com.example.konex"
+>>>>>>> origin/main
 
     compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     defaultConfig {
+<<<<<<< HEAD
         applicationId = "com.konex.app"
+=======
+        applicationId = "com.example.konex"
+>>>>>>> origin/main
 
         minSdk = maxOf(24, flutter.minSdkVersion)
         targetSdk = 36
@@ -54,6 +66,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+<<<<<<< HEAD
     signingConfigs {
         if (hasReleaseSigning) {
             create("release") {
@@ -76,6 +89,11 @@ android {
             } else {
                 signingConfigs.getByName("debug")
             }
+=======
+    buildTypes {
+        release {
+            signingConfig = signingConfigs.getByName("debug")
+>>>>>>> origin/main
         }
     }
 }

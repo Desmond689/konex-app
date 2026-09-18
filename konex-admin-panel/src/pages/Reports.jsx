@@ -2,7 +2,10 @@ import { useState } from "react";
 import ActionSheet from "../components/ActionSheet";
 import Avatar from "../components/Avatar";
 import ConfirmDialog from "../components/ConfirmDialog";
+<<<<<<< HEAD
 import StaffNotes from "../components/StaffNotes";
+=======
+>>>>>>> origin/main
 import { useToast } from "../components/Toast";
 import { useOpenReports, resolveReport, fetchReportPreview } from "../lib/hooks";
 
@@ -308,8 +311,11 @@ export default function Reports() {
                   </div>
                 )}
 
+<<<<<<< HEAD
                 <StaffNotes targetType="report" targetId={preview.report.id} />
 
+=======
+>>>>>>> origin/main
                 <div className="modal-actions" style={{ marginTop: 16 }}>
                   <button className="btn btn-ghost" onClick={() => setPreview(null)}>
                     Close
@@ -354,7 +360,10 @@ export default function Reports() {
           confirmLabel={labelFor(confirmFor.action)}
           danger
           requireReason
+<<<<<<< HEAD
           actionType={confirmFor.action}
+=======
+>>>>>>> origin/main
           onCancel={() => setConfirmFor(null)}
           onConfirm={async (reason) => {
             await runAction(confirmFor.report, confirmFor.action, reason);

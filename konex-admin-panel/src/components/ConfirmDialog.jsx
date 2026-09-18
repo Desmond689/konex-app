@@ -1,15 +1,22 @@
+<<<<<<< HEAD
 import { useEffect, useState } from "react";
 import { listCannedReasons } from "../lib/hooks";
+=======
+import { useState } from "react";
+>>>>>>> origin/main
 
 /**
  * Blocking confirmation for dangerous actions (ban, suspend, restrict,
  * remove content, role changes). Per the moderation review notes, these
  * should never be a single accidental click, and destructive actions
  * should always capture a reason for the audit trail.
+<<<<<<< HEAD
  *
  * Pass `actionType` (e.g. "ban", "suspend", "restrict", "warn",
  * "remove_content") to offer a canned-reason quick-fill dropdown, sourced
  * from Settings → canned reasons.
+=======
+>>>>>>> origin/main
  */
 export default function ConfirmDialog({
   title,
@@ -17,13 +24,17 @@ export default function ConfirmDialog({
   confirmLabel = "Confirm",
   danger = false,
   requireReason = false,
+<<<<<<< HEAD
   actionType = null,
+=======
+>>>>>>> origin/main
   onConfirm,
   onCancel,
 }) {
   const [reason, setReason] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
+<<<<<<< HEAD
   const [canned, setCanned] = useState([]);
 
   useEffect(() => {
@@ -38,6 +49,8 @@ export default function ConfirmDialog({
       cancelled = true;
     };
   }, [actionType]);
+=======
+>>>>>>> origin/main
 
   const submit = async () => {
     if (requireReason && reason.trim().length < 3) {
@@ -59,6 +72,7 @@ export default function ConfirmDialog({
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <h3>{title}</h3>
         {description && <p>{description}</p>}
+<<<<<<< HEAD
         {requireReason && canned.length > 0 && (
           <div className="field">
             <label className="field-label">Quick-fill from a canned reason</label>
@@ -81,6 +95,8 @@ export default function ConfirmDialog({
             </select>
           </div>
         )}
+=======
+>>>>>>> origin/main
         {requireReason && (
           <div className="field">
             <label className="field-label">Reason</label>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useEffect, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import Logo from "./Logo";
@@ -5,17 +6,28 @@ import CommandPalette from "./CommandPalette";
 import { useAuth, can } from "../lib/AuthContext";
 import { useLiveOpenReports } from "../lib/hooks";
 import { useToast } from "./Toast";
+=======
+import { useState } from "react";
+import { NavLink, Outlet } from "react-router-dom";
+import Logo from "./Logo";
+import { useAuth, can } from "../lib/AuthContext";
+import { useOpenReportCount } from "../lib/hooks";
+>>>>>>> origin/main
 
 const NAV = [
   { to: "/", label: "Dashboard", icon: DashboardIcon, end: true },
   { to: "/reports", label: "Report queue", icon: FlagIcon, countKey: "reports" },
+<<<<<<< HEAD
   { to: "/appeals", label: "Appeals", icon: AppealIcon },
   { to: "/analytics", label: "Analytics", icon: AnalyticsIcon },
+=======
+>>>>>>> origin/main
   { to: "/users", label: "Users", icon: UsersIcon },
   { to: "/staff", label: "Staff", icon: StaffIcon, staffOnly: true },
   { to: "/squads", label: "Squads", icon: SquadsIcon },
   { to: "/games", label: "Games", icon: GamesIcon },
   { to: "/audit", label: "Audit log", icon: HistoryIcon },
+<<<<<<< HEAD
   { to: "/settings", label: "Settings", icon: SettingsIcon },
 ];
 
@@ -36,6 +48,14 @@ export default function Layout() {
     showToast(`New report filed on a ${report.target_type}`, "error");
   });
   const [theme, setTheme] = useTheme();
+=======
+];
+
+export default function Layout() {
+  const { session, role, signOut } = useAuth();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const openReports = useOpenReportCount();
+>>>>>>> origin/main
 
   const visibleNav = NAV.filter((item) => {
     if (item.staffOnly) return can(role, "manage_staff");
@@ -49,7 +69,11 @@ export default function Layout() {
           ☰
         </button>
         <Logo size={20} />
+<<<<<<< HEAD
         <span style={{ fontFamily: "var(--font-display)", fontWeight: 700 }}>Konex Admin</span>
+=======
+        <span style={{ fontFamily: "var(--font-display)", fontWeight: 700 }}>Konex Staff</span>
+>>>>>>> origin/main
       </div>
 
       <aside className={`sidebar ${mobileOpen ? "open" : ""}`}>
@@ -57,6 +81,7 @@ export default function Layout() {
           <Logo />
           <div>
             <div className="sidebar-brand-text">KONEX</div>
+<<<<<<< HEAD
             <div className="sidebar-brand-sub">ADMIN CONSOLE</div>
           </div>
         </div>
@@ -69,6 +94,12 @@ export default function Layout() {
           🔍 Search… <span className="muted">⌘K</span>
         </button>
 
+=======
+            <div className="sidebar-brand-sub">STAFF CONSOLE</div>
+          </div>
+        </div>
+
+>>>>>>> origin/main
         <nav className="nav-group">
           {visibleNav.map(({ to, label, icon: Icon, end, countKey }) => (
             <NavLink
@@ -88,6 +119,7 @@ export default function Layout() {
         </nav>
 
         <div className="sidebar-footer">
+<<<<<<< HEAD
           <button
             className="btn btn-ghost btn-sm"
             style={{ marginBottom: 8, width: "100%" }}
@@ -95,6 +127,8 @@ export default function Layout() {
           >
             {theme === "dark" ? "☀ Light mode" : "☾ Dark mode"}
           </button>
+=======
+>>>>>>> origin/main
           <div className="sidebar-user">
             <span className="sidebar-user-email">{session?.user?.email}</span>
             <span className={`sidebar-user-role pill-role-${role}`}>{role}</span>
@@ -108,8 +142,11 @@ export default function Layout() {
       <main className="main">
         <Outlet />
       </main>
+<<<<<<< HEAD
       <CommandPalette />
       {ToastEl}
+=======
+>>>>>>> origin/main
     </div>
   );
 }
@@ -177,6 +214,7 @@ function HistoryIcon() {
     </svg>
   );
 }
+<<<<<<< HEAD
 function AppealIcon() {
   return (
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -201,3 +239,5 @@ function SettingsIcon() {
     </svg>
   );
 }
+=======
+>>>>>>> origin/main

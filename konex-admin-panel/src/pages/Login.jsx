@@ -32,9 +32,15 @@ export default function Login() {
           <Logo size={30} />
         </div>
         <div className="login-brand">KONEX</div>
+<<<<<<< HEAD
         <div className="login-brand-sub">ADMIN CONSOLE</div>
 
         <div className="login-heading">Sign in</div>
+=======
+        <div className="login-brand-sub">STAFF CONSOLE</div>
+
+        <div className="login-heading">Staff sign in</div>
+>>>>>>> origin/main
         <p className="login-body">
           Sign in with your Konex account. Access is limited to moderator, admin, and
           super_admin roles.

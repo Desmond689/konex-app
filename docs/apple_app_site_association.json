@@ -11,6 +11,10 @@
           "/post/*",
           "/lfg/*",
           "/invite/*",
+<<<<<<< HEAD
+=======
+          "/auth/*",
+>>>>>>> origin/main
           "/event/*"
         ]
       }
