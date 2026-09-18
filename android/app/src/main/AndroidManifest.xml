@@ -41,7 +41,6 @@
                 <data android:scheme="https" android:host="konex-app-rho.vercel.app" android:pathPrefix="/post" />
                 <data android:scheme="https" android:host="konex-app-rho.vercel.app" android:pathPrefix="/lfg" />
                 <data android:scheme="https" android:host="konex-app-rho.vercel.app" android:pathPrefix="/invite" />
-<<<<<<< HEAD
                 <data android:scheme="https" android:host="konex-app-rho.vercel.app" android:pathPrefix="/event" />
                 <!-- /auth is deliberately NOT an App Link path: email verification and
                      password-reset links must always land on the website first (see
@@ -50,10 +49,6 @@
                      single-use token and one side always sees "link expired". The app
                      re-enters via the plain `konex://auth/callback` custom-scheme link
                      the website's success screen offers, with no token attached. -->
-=======
-                <data android:scheme="https" android:host="konex-app-rho.vercel.app" android:pathPrefix="/auth" />
-                <data android:scheme="https" android:host="konex-app-rho.vercel.app" android:pathPrefix="/event" />
->>>>>>> origin/main
             </intent-filter>
         </activity>
 
