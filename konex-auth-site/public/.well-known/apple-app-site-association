@@ -1,0 +1,20 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "TEAMID.com.konex.app",
+        "paths": [
+          "/u/*",
+          "/game/*",
+          "/squad/*",
+          "/post/*",
+          "/lfg/*",
+          "/invite/*",
+          "/auth/*",
+          "/event/*"
+        ]
+      }
+    ]
+  }
+}

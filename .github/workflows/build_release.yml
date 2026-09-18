@@ -1,0 +1,132 @@
+name: Build Release AAB
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build_aab:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Flutter version
+        run: flutter --version
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze (non-blocking)
+        run: flutter analyze || true
+
+      - name: Test (non-blocking)
+        run: flutter test || true
+
+      - name: Clean build folders
+        run: flutter clean
+
+      - name: Skip launcher icon generation
+        run: echo "Skipping launcher icon generation; existing Android resources are already present."
+
+      - name: Configure app environment
+        env:
+          CI_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          CI_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          set -eu
+          if [ -z "$CI_SUPABASE_URL" ] || [ -z "$CI_SUPABASE_ANON_KEY" ]; then
+            echo "::error::Repository secrets SUPABASE_URL and SUPABASE_ANON_KEY must be configured before building."
+            exit 1
+          fi
+          case "$CI_SUPABASE_URL" in
+            *placeholder*|*YOUR_*|https://example.supabase.co)
+              echo "::error::SUPABASE_URL is still a placeholder."
+              exit 1
+              ;;
+          esac
+          case "$CI_SUPABASE_ANON_KEY" in
+            *placeholder*|your_*|YOUR_*)
+              echo "::error::SUPABASE_ANON_KEY is still a placeholder."
+              exit 1
+              ;;
+          esac
+          printf 'APP_ENV=production\nSUPABASE_URL=%s\nSUPABASE_ANON_KEY=%s\nENABLE_LOGGING=false\nAPP_VERSION=0.1.0\nBUILD_NUMBER=%s\n' \
+            "$CI_SUPABASE_URL" \
+            "$CI_SUPABASE_ANON_KEY" \
+            "${{ github.run_number }}" > .env
+          echo "Supabase configuration written for the release build."
+
+      - name: Write google-services.json from secret
+        run: |
+          mkdir -p android/app
+          if [ -n "${{ secrets.GOOGLE_SERVICES_JSON }}" ]; then
+            echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 -d > android/app/google-services.json
+            echo "google-services.json written"
+          else
+            echo "No GOOGLE_SERVICES_JSON secret; skipping"
+          fi
+
+      # --- Release signing -------------------------------------------------
+      # Requires three repo secrets (Settings -> Secrets and variables ->
+      # Actions), created once from a keystore YOU generate and keep safe
+      # (see the keytool command in the setup notes):
+      #   ANDROID_KEYSTORE_BASE64   - `base64 -i konex-upload-keystore.jks` output
+      #   ANDROID_KEYSTORE_PASSWORD - the keystore's store password
+      #   ANDROID_KEY_PASSWORD      - the key's password (often same as above)
+      #   ANDROID_KEY_ALIAS         - the alias you chose when generating it
+      # If these aren't set, the build falls back to debug signing so CI
+      # doesn't hard-fail — but that output is NOT upload-ready for Play Store.
+      - name: Write release keystore and key.properties
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > android/app/konex-upload-keystore.jks
+            cat > android/app/key.properties <<KEYPROPS_EOF
+          storeFile=konex-upload-keystore.jks
+          storePassword=$KEYSTORE_PASSWORD
+          keyAlias=$KEY_ALIAS
+          keyPassword=$KEY_PASSWORD
+          KEYPROPS_EOF
+            echo "Release keystore configured -- build will be signed for Play Store."
+          else
+            echo "::warning::ANDROID_KEYSTORE_BASE64 not set -- falling back to debug signing. This AAB is NOT ready to upload to Play Store."
+          fi
+
+      - name: Build release AAB from project root
+        run: |
+          flutter clean
+          flutter pub get
+          flutter build appbundle --release --no-tree-shake-icons --android-skip-build-dependency-validation 2>&1 | tee gradle_output.log
+
+      - name: Upload release AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-aab
+          path: build/app/outputs/bundle/release/*.aab
+          if-no-files-found: error
+
+      - name: Upload Gradle log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gradle-build-log
+          path: gradle_output.log
+          if-no-files-found: ignore

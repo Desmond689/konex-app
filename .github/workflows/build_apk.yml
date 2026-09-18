@@ -1,0 +1,102 @@
+name: Build APK
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build_apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Flutter version
+        run: flutter --version
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze (non-blocking)
+        run: flutter analyze || true
+
+      - name: Test (non-blocking)
+        run: flutter test || true
+
+      - name: Clean build folders
+        run: flutter clean
+
+      - name: Skip launcher icon generation
+        run: echo "Skipping launcher icon generation; existing Android resources are already present."
+
+      - name: Configure app environment
+        env:
+          CI_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          CI_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          set -eu
+          if [ -z "$CI_SUPABASE_URL" ] || [ -z "$CI_SUPABASE_ANON_KEY" ]; then
+            echo "::error::Repository secrets SUPABASE_URL and SUPABASE_ANON_KEY must be configured before building the APK."
+            exit 1
+          fi
+          case "$CI_SUPABASE_URL" in
+            *placeholder*|*YOUR_*|https://example.supabase.co)
+              echo "::error::SUPABASE_URL is still a placeholder."
+              exit 1
+              ;;
+          esac
+          case "$CI_SUPABASE_ANON_KEY" in
+            *placeholder*|your_*|YOUR_*)
+              echo "::error::SUPABASE_ANON_KEY is still a placeholder."
+              exit 1
+              ;;
+          esac
+          printf 'APP_ENV=development\nSUPABASE_URL=%s\nSUPABASE_ANON_KEY=%s\nENABLE_LOGGING=false\nAPP_VERSION=0.1.0\nBUILD_NUMBER=%s\n' \
+            "$CI_SUPABASE_URL" \
+            "$CI_SUPABASE_ANON_KEY" \
+            "${{ github.run_number }}" > .env
+          echo "Supabase configuration written for the APK build."
+
+      - name: Write google-services.json from secret
+        run: |
+          mkdir -p android/app
+          if [ -n "${{ secrets.GOOGLE_SERVICES_JSON }}" ]; then
+            echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 -d > android/app/google-services.json
+            echo "google-services.json written"
+          else
+            echo "No GOOGLE_SERVICES_JSON secret; skipping"
+          fi
+
+      - name: Build release APK from project root
+        run: |
+          flutter clean
+          flutter pub get
+          flutter build apk --release --no-tree-shake-icons --android-skip-build-dependency-validation 2>&1 | tee gradle_output.log
+
+      - name: Upload release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-apk
+          path: build/app/outputs/flutter-apk/*.apk
+          if-no-files-found: error
+
+      - name: Upload Gradle log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gradle-build-log
+          path: gradle_output.log
+          if-no-files-found: ignore

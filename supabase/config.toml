@@ -1,0 +1,2 @@
+[functions.resend-verification]
+verify_jwt = false

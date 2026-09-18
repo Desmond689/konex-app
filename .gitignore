@@ -1,0 +1,83 @@
+# Flutter / Dart
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/
+flutter_*.png
+**/doc/api/
+.flutter-plugins
+.flutter-plugins-dependencies
+.metadata
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+*.swp
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets — NEVER commit real keys
+.env
+.env.*
+!.env.example
+*.pem
+*.p12
+google-services.json
+GoogleService-Info.plist
+**/Secrets.plist
+**/secrets.dart
+
+# Obfuscation / debug symbols (keep out of git, store securely)
+app.*.map.json
+obfuscation/
+*.symbols
+
+# Generated
+**/*.g.dart
+**/*.freezed.dart
+**/*.mocks.dart
+lib/generated/
+
+# Coverage / test
+coverage/
+.test_coverage.dart
+*.lcov
+
+# Android / iOS build artifacts
+**/android/.gradle/
+**/android/local.properties
+**/android/app/debug/
+**/android/app/profile/
+**/android/app/release/
+**/ios/Pods/
+**/ios/.symlinks/
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/ServiceDefinitions.json
+**/ios/Runner/GeneratedPluginRegistrant.*
+
+# Windows / Linux / macOS
+**/windows/flutter/ephemeral/
+**/linux/flutter/ephemeral/
+**/macos/Flutter/ephemeral/
+
+# Misc
+*.log
+*.tmp
+.supabase/
+node_modules/
+
+# Android signing secrets
+**/key.properties
+**/*.jks
+
+# Android signing secrets
+**/key.properties
+**/*.jks

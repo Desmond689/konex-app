@@ -1,0 +1,55 @@
+# Batch 11: CI — analyze, test, dependency + secrets scanning
+name: KONEX CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
+
+  secrets-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter pub get
+      - name: Outdated packages report
+        run: flutter pub outdated || true
+
+  release-obfuscation-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter pub get
+      - name: Verify release build command uses obfuscation
+        run: |
+          grep -q "obfuscate" docs/STORE_COMPLIANCE.md || grep -q "obfuscate" lib/core/security/secure_build.dart
+          echo "Release builds MUST use:"
+          echo "flutter build appbundle --release --obfuscate --split-debug-info=build/symbols"

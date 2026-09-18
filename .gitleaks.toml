@@ -1,0 +1,11 @@
+title = "KONEX Gitleaks configuration"
+
+[allowlist]
+description = "Allow Firebase client API keys in Firebase configuration."
+regexTarget = "match"
+regexes = [
+  '''AIza[0-9A-Za-z_-]{35}'''
+]
+paths = [
+  '''^lib/firebase_options\.dart$'''
+]

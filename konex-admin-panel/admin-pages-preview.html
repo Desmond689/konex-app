@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Konex Admin — Page previews</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --bg: #0a0a12; --surface: #131320; --surface-raised: #1a1a2c; --surface-hover: #20203a;
+  --line: #26263c; --violet: #8c6bff; --coral: #ff6a4d; --text: #f3f1fb;
+  --text-muted: #a5a1c2; --text-faint: #6a6690; --success: #4dffb4; --warning: #ffc24d; --error: #ff6a6a;
+  --font-display: "Space Grotesk", sans-serif; --font-body: "Inter", sans-serif; --font-mono: "IBM Plex Mono", monospace;
+  --sidebar-w: 232px;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: #05050a; color: var(--text); font-family: var(--font-body); }
+h1.doc { font-family: var(--font-display); padding: 32px 32px 8px; font-size: 28px; }
+p.doc { color: var(--text-muted); padding: 0 32px 24px; max-width: 720px; line-height: 1.5; }
+.page-label { font-family: var(--font-mono); font-size: 12px; color: var(--violet); padding: 24px 32px 8px; letter-spacing: 0.06em; text-transform: uppercase; }
+.frame {
+  margin: 0 24px 40px; border: 1px solid var(--line); border-radius: 16px; overflow: hidden;
+  background: var(--bg); box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+  display: flex; min-height: 420px;
+}
+.sidebar {
+  width: var(--sidebar-w); background: var(--surface); border-right: 1px solid var(--line);
+  padding: 20px 14px; display: flex; flex-direction: column; flex-shrink: 0;
+}
+.brand { display: flex; align-items: center; gap: 10px; padding: 6px 8px 20px; }
+.brand-mark { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, var(--violet), var(--coral)); }
+.brand-text { font-family: var(--font-display); font-weight: 700; font-size: 15px; }
+.brand-sub { font-family: var(--font-mono); font-size: 10px; color: var(--text-faint); letter-spacing: 0.04em; }
+.nav-link {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px;
+  color: var(--text-muted); font-size: 13.5px; margin-bottom: 2px;
+}
+.nav-link.active { background: rgba(140,107,255,0.12); color: var(--text); }
+.badge { margin-left: auto; background: var(--coral); color: #fff; font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 10px; }
+.main { flex: 1; padding: 28px 32px; overflow: hidden; }
+.page-title { font-family: var(--font-display); font-size: 22px; margin: 0 0 4px; }
+.page-sub { color: var(--text-muted); font-size: 13.5px; margin: 0 0 20px; }
+.stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 12px; }
+.stat-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; }
+.stat-val { font-family: var(--font-display); font-size: 26px; font-weight: 700; }
+.stat-val.coral { color: var(--coral); }
+.stat-lab { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; margin-top: 16px; }
+.panel-h { padding: 14px 18px; border-bottom: 1px solid var(--line); font-weight: 600; font-size: 14px; }
+.row { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-bottom: 1px solid var(--line); }
+.row:last-child { border-bottom: none; }
+.avatar {
+  width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #3a3558, #2a2840);
+  display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;
+  color: var(--text-muted); flex-shrink: 0; overflow: hidden;
+}
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.avatar.lg { width: 56px; height: 56px; font-size: 20px; }
+.row-main { flex: 1; min-width: 0; }
+.row-title { font-size: 14.5px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+.row-sub { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+.btn { border: none; border-radius: 8px; padding: 7px 12px; font-size: 13px; cursor: default; font-family: inherit; }
+.btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--line); }
+.btn-primary { background: var(--violet); color: #fff; }
+.btn-danger { background: var(--coral); color: #fff; }
+.pill { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; font-family: var(--font-mono); text-transform: lowercase; }
+.pill-role-user { background: rgba(165,161,194,0.12); color: var(--text-muted); }
+.pill-role-moderator { background: rgba(140,107,255,0.15); color: var(--violet); }
+.pill-role-admin { background: rgba(255,106,77,0.15); color: var(--coral); }
+.pill-role-super_admin { background: linear-gradient(135deg, rgba(140,107,255,0.25), rgba(255,106,77,0.2)); color: var(--text); }
+.pill-verified { background: rgba(77,255,180,0.15); color: var(--success); }
+.pill-banned { background: rgba(255,106,106,0.15); color: var(--error); }
+.pill-restricted { background: rgba(255,194,77,0.15); color: var(--warning); }
+.pill-open { background: rgba(255,194,77,0.15); color: var(--warning); }
+.input {
+  width: 100%; max-width: 360px; background: var(--surface); border: 1px solid var(--line);
+  border-radius: 10px; padding: 10px 14px; color: var(--text); font-size: 14px; margin-bottom: 16px;
+}
+.drawer {
+  position: absolute; right: 24px; top: 80px; width: 420px; background: var(--surface-raised);
+  border: 1px solid var(--line); border-radius: 14px; padding: 20px; box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+  z-index: 2;
+}
+.ctx-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 14px 0; }
+.ctx-item { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.ctx-label { font-size: 10px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.04em; }
+.ctx-value { font-size: 14px; font-weight: 600; margin-top: 2px; }
+.ctx-value.ok { color: var(--success); }
+.ctx-value.danger { color: var(--coral); }
+.section { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin: 12px 0 6px; }
+.content-box { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px; margin-bottom: 10px; }
+.media-thumbs { display: flex; gap: 8px; margin-top: 8px; }
+.thumb { width: 72px; height: 72px; border-radius: 8px; background: #2a2840; border: 1px solid var(--line); }
+.frame-rel { position: relative; }
+.note { color: var(--text-faint); font-size: 12px; padding: 0 32px 8px; }
+.sidebar-footer { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--line); font-size: 12px; color: var(--text-muted); }
+.sidebar-footer .role { display: inline-block; margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<h1 class="doc">Konex Admin Console — how every page looks</h1>
+<p class="doc">
+  Visual layout of all staff pages after the production hardening pass.
+  Dark theme, violet/coral accents. Profile pictures now show on <strong>Users</strong> and <strong>Staff</strong>
+  (real <code>avatar_url</code> when set, otherwise a letter fallback).
+</p>
+
+<!-- ===================== DASHBOARD ===================== -->
+<div class="page-label">1 · Dashboard</div>
+<p class="note">Totals + today metrics + quick actions</p>
+<div class="frame">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark"></div><div><div class="brand-text">KONEX</div><div class="brand-sub">STAFF CONSOLE</div></div></div>
+    <div class="nav-link active">Dashboard</div>
+    <div class="nav-link">Report queue <span class="badge">3</span></div>
+    <div class="nav-link">Users</div>
+    <div class="nav-link">Staff</div>
+    <div class="nav-link">Games</div>
+    <div class="nav-link">Audit log</div>
+    <div class="sidebar-footer">you@konex.app<br/><span class="pill pill-role-super_admin role">super_admin</span></div>
+  </aside>
+  <main class="main">
+    <h1 class="page-title">Dashboard</h1>
+    <p class="page-sub">An overview of what's happening across Konex right now.</p>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-val">12,480</div><div class="stat-lab">Total users</div></div>
+      <div class="stat-card"><div class="stat-val coral">3</div><div class="stat-lab">Open reports</div></div>
+      <div class="stat-card"><div class="stat-val">48,210</div><div class="stat-lab">Posts</div></div>
+      <div class="stat-card"><div class="stat-val">1,102</div><div class="stat-lab">Squads</div></div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-val">7</div><div class="stat-lab">Reports today</div></div>
+      <div class="stat-card"><div class="stat-val">5</div><div class="stat-lab">Resolved today</div></div>
+      <div class="stat-card"><div class="stat-val">42</div><div class="stat-lab">New users today</div></div>
+      <div class="stat-card"><div class="stat-val">18</div><div class="stat-lab">Banned users</div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-h">Quick actions</div>
+      <div class="row"><div class="row-main"><div class="row-title">Create game</div><div class="row-sub">Game = Community in one step</div></div><span style="color:var(--text-faint)">→</span></div>
+      <div class="row"><div class="row-main"><div class="row-title">Report queue</div><div class="row-sub">Review and action reports</div></div><span style="color:var(--text-faint)">→</span></div>
+      <div class="row"><div class="row-main"><div class="row-title">User management</div><div class="row-sub">Search, ban, roles, history</div></div><span style="color:var(--text-faint)">→</span></div>
+    </div>
+  </main>
+</div>
+
+<!-- ===================== USERS ===================== -->
+<div class="page-label">2 · Users (with profile pictures)</div>
+<p class="note">Search results show avatar · Manage opens full moderation context</p>
+<div class="frame frame-rel">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark"></div><div><div class="brand-text">KONEX</div><div class="brand-sub">STAFF CONSOLE</div></div></div>
+    <div class="nav-link">Dashboard</div>
+    <div class="nav-link">Report queue <span class="badge">3</span></div>
+    <div class="nav-link active">Users</div>
+    <div class="nav-link">Staff</div>
+    <div class="nav-link">Games</div>
+    <div class="nav-link">Audit log</div>
+  </aside>
+  <main class="main">
+    <h1 class="page-title">Users</h1>
+    <p class="page-sub">Search by username or gamer name. Open Manage for full moderation context before acting.</p>
+    <div class="input">shadow</div>
+    <div class="panel">
+      <div class="row">
+        <div class="avatar" style="background:linear-gradient(135deg,#6b5b95,#4a3f6b)">S</div>
+        <div class="row-main">
+          <div class="row-title">ShadowStrike <span class="pill pill-verified">verified</span></div>
+          <div class="row-sub">@shadow · <span class="pill pill-role-user">user</span></div>
+        </div>
+        <button class="btn btn-ghost">Manage</button>
+      </div>
+      <div class="row">
+        <div class="avatar" style="background:linear-gradient(135deg,#c45c4a,#8a3a30)">N</div>
+        <div class="row-main">
+          <div class="row-title">NovaRex</div>
+          <div class="row-sub">@novarex · <span class="pill pill-role-user">user</span> <span class="pill pill-restricted">restricted</span></div>
+        </div>
+        <button class="btn btn-ghost">Manage</button>
+      </div>
+      <div class="row">
+        <div class="avatar" style="background:linear-gradient(135deg,#3d8b6e,#2a5c48)">K</div>
+        <div class="row-main">
+          <div class="row-title">KaylaG <span class="pill pill-verified">verified</span></div>
+          <div class="row-sub">@kayla · <span class="pill pill-role-moderator">moderator</span></div>
+        </div>
+        <button class="btn btn-ghost">Manage</button>
+      </div>
+    </div>
+  </main>
+  <!-- Manage drawer mock -->
+  <div class="drawer">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+      <div class="avatar lg" style="background:linear-gradient(135deg,#6b5b95,#4a3f6b)">S</div>
+      <div>
+        <div class="row-title" style="font-size:16px">@shadow <span class="pill pill-verified">verified</span></div>
+        <div class="row-sub">ShadowStrike</div>
+      </div>
+    </div>
+    <div class="ctx-grid">
+      <div class="ctx-item"><div class="ctx-label">Status</div><div class="ctx-value ok">Active</div></div>
+      <div class="ctx-item"><div class="ctx-label">Role</div><div class="ctx-value">user</div></div>
+      <div class="ctx-item"><div class="ctx-label">Verification</div><div class="ctx-value">Verified</div></div>
+      <div class="ctx-item"><div class="ctx-label">Reports received</div><div class="ctx-value">2</div></div>
+      <div class="ctx-item"><div class="ctx-label">Warnings</div><div class="ctx-value">1</div></div>
+      <div class="ctx-item"><div class="ctx-label">Restrictions</div><div class="ctx-value">0</div></div>
+      <div class="ctx-item"><div class="ctx-label">Suspensions</div><div class="ctx-value">0</div></div>
+      <div class="ctx-item"><div class="ctx-label">Bans</div><div class="ctx-value">0</div></div>
+    </div>
+    <div class="section">Moderation history</div>
+    <div class="content-box">
+      <div class="row-title"><span class="pill">warn</span> <span class="row-sub">by @kayla</span></div>
+      <div class="row-sub">Spam in LFG channel · Aug 28</div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+      <button class="btn btn-ghost">Close</button>
+      <button class="btn btn-primary">Take action</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== REPORTS ===================== -->
+<div class="page-label">3 · Report queue + content preview</div>
+<p class="note">Review opens reported post text, media thumbs, user profile + prior actions</p>
+<div class="frame frame-rel">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark"></div><div><div class="brand-text">KONEX</div><div class="brand-sub">STAFF CONSOLE</div></div></div>
+    <div class="nav-link">Dashboard</div>
+    <div class="nav-link active">Report queue <span class="badge">3</span></div>
+    <div class="nav-link">Users</div>
+    <div class="nav-link">Staff</div>
+    <div class="nav-link">Games</div>
+    <div class="nav-link">Audit log</div>
+  </aside>
+  <main class="main">
+    <h1 class="page-title">Report queue</h1>
+    <p class="page-sub">3 open reports awaiting review.</p>
+    <div class="panel">
+      <div class="row">
+        <div class="row-main">
+          <div class="row-title"><span class="pill pill-open">post</span> harassment</div>
+          <div class="row-sub">by @reporter42 · Aug 31, 10:14 AM</div>
+          <div class="row-sub" style="margin-top:4px;font-family:var(--font-mono);font-size:12px">Targeted insults in comments</div>
+        </div>
+        <button class="btn btn-ghost">Review</button>
+      </div>
+      <div class="row">
+        <div class="row-main">
+          <div class="row-title"><span class="pill pill-open">profile</span> spam</div>
+          <div class="row-sub">by @mod_helper · Aug 30, 6:02 PM</div>
+        </div>
+        <button class="btn btn-ghost">Review</button>
+      </div>
+    </div>
+  </main>
+  <div class="drawer">
+    <div class="row-title" style="font-size:15px;margin-bottom:6px">Report · <span class="pill pill-open">post</span> harassment</div>
+    <div class="row-sub" style="margin-bottom:10px">Reported Aug 31, 10:14 AM</div>
+    <div class="section">Reported content</div>
+    <div class="content-box">
+      <div class="row-title">@novarex</div>
+      <div style="font-size:14px;line-height:1.5;margin:8px 0">You guys are trash, uninstall already…</div>
+      <div class="media-thumbs"><div class="thumb"></div><div class="thumb"></div></div>
+      <div class="row-sub" style="margin-top:8px">post · 12 likes · 4 comments</div>
+    </div>
+    <div class="section">Reported user</div>
+    <div class="content-box" style="display:flex;gap:12px;align-items:center">
+      <div class="avatar lg" style="background:linear-gradient(135deg,#c45c4a,#8a3a30)">N</div>
+      <div>
+        <div class="row-title">@novarex <span class="pill pill-restricted">restricted</span></div>
+        <div class="row-sub">Role: user · Joined Jul 12</div>
+      </div>
+    </div>
+    <div class="section">Previous moderation</div>
+    <div class="content-box">
+      <div class="row-title"><span class="pill">restrict</span> <span class="row-sub">by @kayla</span></div>
+      <div class="row-sub">Toxic chat · Aug 20</div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+      <button class="btn btn-ghost">Close</button>
+      <button class="btn btn-primary">Take action</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== STAFF ===================== -->
+<div class="page-label">4 · Staff (super_admin only)</div>
+<p class="note">Grouped by role · avatars · promote/demote within hierarchy</p>
+<div class="frame">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark"></div><div><div class="brand-text">KONEX</div><div class="brand-sub">STAFF CONSOLE</div></div></div>
+    <div class="nav-link">Dashboard</div>
+    <div class="nav-link">Report queue</div>
+    <div class="nav-link">Users</div>
+    <div class="nav-link active">Staff</div>
+    <div class="nav-link">Games</div>
+    <div class="nav-link">Audit log</div>
+  </aside>
+  <main class="main">
+    <h1 class="page-title">Staff</h1>
+    <p class="page-sub">Only super admins can manage staff. Super admin itself is never changeable from the app.</p>
+    <div class="panel">
+      <div class="panel-h">Super Admins <span style="color:var(--text-faint);font-weight:400">(1)</span></div>
+      <div class="row">
+        <div class="avatar" style="background:linear-gradient(135deg,#8c6bff,#ff6a4d)">Y</div>
+        <div class="row-main">
+          <div class="row-title">You <span class="pill pill-verified">verified</span></div>
+          <div class="row-sub">@you · <span class="pill pill-role-super_admin">super_admin</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:12px">
+      <div class="panel-h">Admins <span style="color:var(--text-faint);font-weight:400">(1)</span></div>
+      <div class="row">
+        <div class="avatar" style="background:linear-gradient(135deg,#ff6a4d,#c45c4a)">A</div>
+        <div class="row-main">
+          <div class="row-title">AlexAdmin</div>
+          <div class="row-sub">@alex · <span class="pill pill-role-admin">admin</span></div>
+        </div>
+        <button class="btn btn-ghost">Manage</button>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:12px">
+      <div class="panel-h">Moderators <span style="color:var(--text-faint);font-weight:400">(2)</span></div>
+      <div class="row">
+        <div class="avatar" style="background:linear-gradient(135deg,#3d8b6e,#2a5c48)">K</div>
+        <div class="row-main">
+          <div class="row-title">KaylaG <span class="pill pill-verified">verified</span></div>
+          <div class="row-sub">@kayla · <span class="pill pill-role-moderator">moderator</span></div>
+        </div>
+        <button class="btn btn-ghost">Manage</button>
+      </div>
+      <div class="row">
+        <div class="avatar">M</div>
+        <div class="row-main">
+          <div class="row-title">ModMike</div>
+          <div class="row-sub">@mike · <span class="pill pill-role-moderator">moderator</span></div>
+        </div>
+        <button class="btn btn-ghost">Manage</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ===================== GAMES ===================== -->
+<div class="page-label">5 · Games</div>
+<p class="note">Search / list communities · create & edit with logos</p>
+<div class="frame">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark"></div><div><div class="brand-text">KONEX</div><div class="brand-sub">STAFF CONSOLE</div></div></div>
+    <div class="nav-link">Dashboard</div>
+    <div class="nav-link">Report queue</div>
+    <div class="nav-link">Users</div>
+    <div class="nav-link">Staff</div>
+    <div class="nav-link active">Games</div>
+    <div class="nav-link">Audit log</div>
+  </aside>
+  <main class="main">
+    <h1 class="page-title">Games</h1>
+    <p class="page-sub">Each game is a community. Search, edit, or create.</p>
+    <div style="display:flex;gap:10px;margin-bottom:16px">
+      <div class="input" style="margin:0;flex:1">Search games…</div>
+      <button class="btn btn-primary">+ Create game</button>
+    </div>
+    <div class="panel">
+      <div class="row">
+        <div class="avatar" style="border-radius:10px;background:#1e3a5f">🎮</div>
+        <div class="row-main">
+          <div class="row-title">Call of Duty: Mobile</div>
+          <div class="row-sub">codm · 4,210 members</div>
+        </div>
+        <button class="btn btn-ghost">Edit</button>
+      </div>
+      <div class="row">
+        <div class="avatar" style="border-radius:10px;background:#3a1e5f">🎮</div>
+        <div class="row-main">
+          <div class="row-title">Valorant</div>
+          <div class="row-sub">valorant · 2,880 members</div>
+        </div>
+        <button class="btn btn-ghost">Edit</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ===================== AUDIT ===================== -->
+<div class="page-label">6 · Audit log</div>
+<p class="note">Chronological staff actions (roles, bans, report resolutions, etc.)</p>
+<div class="frame">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark"></div><div><div class="brand-text">KONEX</div><div class="brand-sub">STAFF CONSOLE</div></div></div>
+    <div class="nav-link">Dashboard</div>
+    <div class="nav-link">Report queue</div>
+    <div class="nav-link">Users</div>
+    <div class="nav-link">Staff</div>
+    <div class="nav-link">Games</div>
+    <div class="nav-link active">Audit log</div>
+  </aside>
+  <main class="main">
+    <h1 class="page-title">Audit log</h1>
+    <p class="page-sub">Every staff action, in order.</p>
+    <div class="panel">
+      <div class="row">
+        <div class="row-main">
+          <div class="row-title"><span class="pill">ban</span> profile</div>
+          <div class="row-sub">actor staff · reason: repeated harassment · Aug 31, 11:02</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="row-main">
+          <div class="row-title"><span class="pill">set_role</span> profile</div>
+          <div class="row-sub">actor super_admin · reason: moderator · Aug 30, 4:40</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="row-main">
+          <div class="row-title"><span class="pill">remove_content</span> post</div>
+          <div class="row-sub">actor moderator · reason: spam · Aug 30, 2:11</div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<p class="doc" style="padding-bottom:48px">
+  <strong>Profile pictures on Users:</strong> Yes — each row shows <code>avatar_url</code> when present,
+  otherwise a circular initial fallback. Same on Staff and in the report “Reported user” block.
+  Apply migration <code>202608310003_admin_resolve_and_staff.sql</code> so staff list includes <code>avatar_url</code>.
+</p>
+</body>
+</html>

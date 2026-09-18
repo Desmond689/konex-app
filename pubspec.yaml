@@ -1,0 +1,89 @@
+name: konex
+description: KONEX — Gaming-first social network for gamers (Cameroon → global).
+publish_to: "none"
+version: 0.1.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # State & routing
+  flutter_riverpod: ^2.5.1
+  riverpod_annotation: ^2.3.5
+  go_router: ^14.2.0
+
+  # Backend
+  supabase_flutter: ^2.5.0
+  postgrest: any
+
+  # UI / media
+  cached_network_image: ^3.3.1
+  image_picker: ^1.1.2
+  image: ^4.2.0
+  video_player: ^2.9.1
+  chewie: ^1.8.1
+  visibility_detector: ^0.4.0+2
+  google_fonts: ^6.2.1
+  flutter_webrtc: ^1.6.0 # Upgraded from 0.12.12 — fixes compileSdk 31 vs 34+ AAR
+                          # metadata conflict with modern AndroidX deps
+                          # (fragment 1.7.1, core-ktx 1.13.1, etc). 1.2.0+
+                          # already compiles against compileSdk 36. No Dart
+                          # API changes between 0.12.12 and 1.6.0.
+
+  # Security / device
+  flutter_secure_storage: ^9.2.2
+  local_auth: ^2.2.0
+  permission_handler: ^11.3.1
+  device_info_plus: ^12.4.0
+  package_info_plus: ^9.0.1
+  connectivity_plus: ^6.0.5
+  shared_preferences: ^2.3.2
+
+  # Network / utils
+  http: ^1.2.2
+  intl: ^0.20.2
+  uuid: ^4.4.0
+  collection: ^1.18.0
+  path: ^1.9.0
+  path_provider: ^2.1.3
+  url_launcher: ^6.3.1
+  app_links: ^6.3.2
+  share_plus: ^10.0.0
+  flutter_dotenv: ^5.1.0
+  equatable: ^2.0.5
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.9.0
+  timeago: ^3.6.1
+
+  # Notifications & crash reporting
+  firebase_core: ^4.12.1
+  firebase_messaging: ^16.4.3
+  firebase_crashlytics: ^5.0.0
+  # flutter_local_notifications intentionally NOT included: on Telvo, 16.3.3/17.2.4
+  # failed to compile on recent Android Gradle Plugin toolchains (bigLargeIcon
+  # ambiguity + core library desugaring requirement). FCM already shows system
+  # notifications when the app is backgrounded/terminated. Only add this back
+  # with a fixed 19.x+ release if you specifically need in-app foreground banners.
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  build_runner: ^2.4.11
+  freezed: ^2.5.2
+  json_serializable: ^6.8.0
+  riverpod_generator: ^2.4.0
+  mockito: ^5.4.4
+  mocktail: ^1.0.3
+
+flutter:
+  uses-material-design: true
+  assets:
+    - .env
+    - .env.example
+    - assets/images/
