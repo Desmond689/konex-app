@@ -1,9 +1,6 @@
-<<<<<<< HEAD
 import java.util.Properties
 import java.io.FileInputStream
 
-=======
->>>>>>> origin/main
 plugins {
     id("com.android.application")
     id("dev.flutter.flutter-gradle-plugin")
@@ -13,8 +10,7 @@ if (file("google-services.json").exists()) {
     apply(plugin = "com.google.gms.google-services")
 }
 
-<<<<<<< HEAD
-// Release signing comes from key.properties, which is never committed —
+// Release signing comes from key.properties, which is never committed --
 // see .gitignore. Locally, create it yourself next to this file:
 //   storeFile=/absolute/path/to/konex-upload-keystore.jks
 //   storePassword=...
@@ -30,20 +26,12 @@ if (hasReleaseSigning) {
 
 android {
     namespace = "com.konex.app"
-=======
-android {
-    namespace = "com.example.konex"
->>>>>>> origin/main
 
     compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     defaultConfig {
-<<<<<<< HEAD
         applicationId = "com.konex.app"
-=======
-        applicationId = "com.example.konex"
->>>>>>> origin/main
 
         minSdk = maxOf(24, flutter.minSdkVersion)
         targetSdk = 36
@@ -54,7 +42,7 @@ android {
         // Only build native libs for real-device architectures.
         // x86/x86_64 are emulator-only and roughly double the memory/time
         // spent in mergeReleaseNativeLibs + stripReleaseDebugSymbols, which
-        // is native tooling outside the JVM heap — this is what was
+        // is native tooling outside the JVM heap -- this is what was
         // silently OOM-killing the CI runner, not the Gradle/Kotlin heap.
         ndk {
             abiFilters += setOf("armeabi-v7a", "arm64-v8a")
@@ -66,7 +54,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-<<<<<<< HEAD
     signingConfigs {
         if (hasReleaseSigning) {
             create("release") {
@@ -89,11 +76,6 @@ android {
             } else {
                 signingConfigs.getByName("debug")
             }
-=======
-    buildTypes {
-        release {
-            signingConfig = signingConfigs.getByName("debug")
->>>>>>> origin/main
         }
     }
 }

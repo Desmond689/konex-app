@@ -560,7 +560,6 @@ button {
     display: none;
   }
 }
-<<<<<<< HEAD
 
 /* ---------- legal / privacy page ---------- */
 .legal-updated { color: var(--text-faint); font-size: 14px; margin: 4px 0 20px; }
@@ -578,5 +577,3 @@ button {
 .legal-contact-box { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; color: var(--text-muted); }
 .legal-contact-box strong { color: var(--text); }
 .legal-contact-box a { color: var(--violet); }
-=======
->>>>>>> origin/main

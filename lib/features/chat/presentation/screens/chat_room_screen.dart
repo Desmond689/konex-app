@@ -41,10 +41,7 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
   String? _otherUserId;
   String? _otherAvatarUrl;
   bool _isCommunityChat = false;
-<<<<<<< HEAD
   bool _isSquadChat = false;
-=======
->>>>>>> origin/main
   DateTime? _otherLastSeen;
   Timer? _presencePoll;
 
@@ -101,7 +98,6 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
         if (conv['type'] == 'squad' && conv['squad_id'] != null) {
           final s = await client
               .from('squads')
-<<<<<<< HEAD
               .select('name, logo_url')
               .eq('id', conv['squad_id'])
               .maybeSingle();
@@ -110,12 +106,6 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
             _otherAvatarUrl = s?['logo_url'] as String?;
             _isSquadChat = true;
           });
-=======
-              .select('name')
-              .eq('id', conv['squad_id'])
-              .maybeSingle();
-          setState(() => _title = s?['name'] as String? ?? 'Squad Chat');
->>>>>>> origin/main
         } else if (conv['type'] == 'community' &&
             conv['community_id'] != null) {
           final c = await client
@@ -472,7 +462,6 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
       appBar: AppBar(
         title: Row(
           children: [
-<<<<<<< HEAD
             if (_otherUserId != null || _isCommunityChat || _isSquadChat) ...[
               GestureDetector(
                 onTap: _otherUserId != null
@@ -480,13 +469,6 @@ class _ChatRoomScreenState extends ConsumerState<ChatRoomScreen> {
                     : (_isCommunityChat || _isSquadChat)
                         ? _showParticipants
                         : null,
-=======
-            if (_otherUserId != null || _isCommunityChat) ...[
-              GestureDetector(
-                onTap: _otherUserId == null
-                    ? null
-                    : () => context.push('/user/$_otherUserId'),
->>>>>>> origin/main
                 child: Stack(
                   clipBehavior: Clip.none,
                   children: [

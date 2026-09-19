@@ -1,16 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-<<<<<<< HEAD
 import { Link, useNavigate } from "react-router-dom";
 import { listAllGames } from "../lib/hooks";
 
 export default function Games() {
   const navigate = useNavigate();
-=======
-import { Link } from "react-router-dom";
-import { listAllGames } from "../lib/hooks";
-
-export default function Games() {
->>>>>>> origin/main
   const [query, setQuery] = useState("");
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -78,16 +71,7 @@ export default function Games() {
           </div>
         ) : (
           games.map((g) => (
-<<<<<<< HEAD
             <div className="row" key={g.id}>
-=======
-            <Link
-              to={`/games/${g.id}`}
-              className="row"
-              key={g.id}
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
->>>>>>> origin/main
               <div
                 style={{
                   width: 38,
@@ -117,7 +101,6 @@ export default function Games() {
                   {g.member_count ?? 0} members{g.category ? ` · ${g.category}` : ""}
                 </div>
               </div>
-<<<<<<< HEAD
               <div className="row-actions">
                 <Link to={`/games/${g.id}/members`} className="btn btn-ghost btn-sm">
                   Members
@@ -127,10 +110,6 @@ export default function Games() {
                 </button>
               </div>
             </div>
-=======
-              <span className="muted">Edit →</span>
-            </Link>
->>>>>>> origin/main
           ))
         )}
       </div>

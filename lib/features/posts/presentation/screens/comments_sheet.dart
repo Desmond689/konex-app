@@ -3,10 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-<<<<<<< HEAD
 import 'package:go_router/go_router.dart';
-=======
->>>>>>> origin/main
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -549,7 +546,6 @@ class _CommentTile extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-<<<<<<< HEAD
           GestureDetector(
             onTap: () => context.push('/user/${comment.authorId}'),
             child: CircleAvatar(
@@ -567,22 +563,6 @@ class _CommentTile extends StatelessWidget {
                     )
                   : null,
             ),
-=======
-          CircleAvatar(
-            radius: isReply ? 14 : 16,
-            backgroundColor: AppColors.surfaceElevated,
-            backgroundImage: comment.authorAvatarUrl != null
-                ? CachedNetworkImageProvider(comment.authorAvatarUrl!)
-                : null,
-            child: comment.authorAvatarUrl == null
-                ? Text(
-                    comment.authorUsername.isNotEmpty
-                        ? comment.authorUsername[0].toUpperCase()
-                        : '?',
-                    style: TextStyle(fontSize: isReply ? 11 : 13),
-                  )
-                : null,
->>>>>>> origin/main
           ),
           const SizedBox(width: 10),
           Expanded(

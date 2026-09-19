@@ -2,10 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import ActionSheet from "../components/ActionSheet";
 import Avatar from "../components/Avatar";
 import ConfirmDialog from "../components/ConfirmDialog";
-<<<<<<< HEAD
 import StaffNotes from "../components/StaffNotes";
-=======
->>>>>>> origin/main
 import { useToast } from "../components/Toast";
 import { useAuth, can } from "../lib/AuthContext";
 import {
@@ -278,11 +275,8 @@ export default function Users() {
                   </div>
                 )}
 
-<<<<<<< HEAD
                 <StaffNotes targetType="profile" targetId={detailUser.id} />
 
-=======
->>>>>>> origin/main
                 <div className="modal-actions" style={{ marginTop: 16 }}>
                   <button className="btn btn-ghost" onClick={() => setDetailUser(null)}>
                     Close
@@ -318,10 +312,7 @@ export default function Users() {
           confirmLabel="Ban user"
           danger
           requireReason
-<<<<<<< HEAD
           actionType="ban"
-=======
->>>>>>> origin/main
           onCancel={() => setConfirmAction(null)}
           onConfirm={async (reason) => {
             await apply(confirmAction.user, confirmAction.action, reason);

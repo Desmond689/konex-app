@@ -99,10 +99,7 @@ export default function Landing() {
       <div className="wrap">
         <footer className="footer">
           <span>© {new Date().getFullYear()} Konex</span>
-<<<<<<< HEAD
           <Link to="/privacy">Privacy Policy</Link>
-=======
->>>>>>> origin/main
           <a href="mailto:support@konex-app-rho.vercel.app">support@konex-app-rho.vercel.app</a>
         </footer>
       </div>

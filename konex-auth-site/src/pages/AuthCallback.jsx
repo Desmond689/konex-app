@@ -10,7 +10,6 @@ const APP_STORE_URL = 'https://apps.apple.com/app/konex'
 const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.konex.app'
 
 export default function AuthCallback() {
-<<<<<<< HEAD
   // 'ready' | 'verifying' | 'success' | 'error'
   //
   // IMPORTANT: verification is NOT triggered automatically on page load.
@@ -89,83 +88,6 @@ export default function AuthCallback() {
     setStatus(nextStatus)
     setMessage(nextStatus === 'error' ? err : '')
   }
-=======
-  const [status, setStatus] = useState('pending') // 'pending' | 'success' | 'error'
-  const [message, setMessage] = useState('Confirming your email…')
-  const settled = useRef(false)
-
-  useEffect(() => {
-    let timeout
-
-    async function resolve() {
-      const url = new URL(window.location.href)
-      const search = url.searchParams
-      // Supabase sometimes returns implicit-flow params after a `#` instead of `?`
-      const hashParams = new URLSearchParams(url.hash.replace(/^#/, ''))
-
-      const errorDescription =
-        search.get('error_description') || hashParams.get('error_description') || search.get('error')
-      if (errorDescription) {
-        finish('error', decodeURIComponent(errorDescription.replace(/\+/g, ' ')))
-        return
-      }
-
-      const tokenHash = search.get('token_hash')
-      const type = search.get('type')
-      const code = search.get('code')
-
-      try {
-        if (tokenHash && type) {
-          // Newer Supabase email-link flow: /auth/callback?token_hash=...&type=signup
-          const { error } = await supabase.auth.verifyOtp({ token_hash: tokenHash, type })
-          if (error) throw error
-          finish('success')
-          return
-        }
-
-        if (code) {
-          // PKCE flow: /auth/callback?code=...
-          const { error } = await supabase.auth.exchangeCodeForSession(code)
-          if (error) throw error
-          finish('success')
-          return
-        }
-
-        if (hashParams.get('access_token')) {
-          // Implicit flow: supabase-js's detectSessionInUrl picks this up on load.
-          // Give it a moment, then confirm via getSession().
-          const { data, error } = await supabase.auth.getSession()
-          if (error) throw error
-          if (data.session) {
-            finish('success')
-            return
-          }
-        }
-
-        // Nothing recognizable in the URL at all.
-        finish('error', 'This confirmation link is missing or incomplete.')
-      } catch (err) {
-        finish('error', err?.message || 'That link is invalid or has expired.')
-      }
-    }
-
-    function finish(nextStatus, err) {
-      if (settled.current) return
-      settled.current = true
-      clearTimeout(timeout)
-      setStatus(nextStatus)
-      setMessage(nextStatus === 'error' ? err : '')
-    }
-
-    // Safety net in case none of the branches above resolve in time.
-    timeout = setTimeout(() => {
-      finish('error', 'That link is invalid or has expired. Request a new one from the app.')
-    }, 8000)
-
-    resolve()
-    return () => clearTimeout(timeout)
-  }, [])
->>>>>>> origin/main
 
   return (
     <div className="callback-screen">
@@ -181,12 +103,8 @@ export default function AuthCallback() {
 
       <div className="callback-center">
         <div className="card">
-<<<<<<< HEAD
           {status === 'ready' && <ReadyCard onConfirm={confirmEmail} />}
           {status === 'verifying' && <PendingCard />}
-=======
-          {status === 'pending' && <PendingCard />}
->>>>>>> origin/main
           {status === 'success' && <SuccessCard />}
           {status === 'error' && <ErrorCard message={message} />}
         </div>
@@ -195,7 +113,6 @@ export default function AuthCallback() {
   )
 }
 
-<<<<<<< HEAD
 function ReadyCard({ onConfirm }) {
   return (
     <>
@@ -212,8 +129,6 @@ function ReadyCard({ onConfirm }) {
   )
 }
 
-=======
->>>>>>> origin/main
 function PendingCard() {
   return (
     <>
@@ -266,7 +181,6 @@ function ErrorCard({ message }) {
   )
 }
 
-<<<<<<< HEAD
 function SpinnerMark({ idle = false }) {
   return (
     <svg width="48" height="48" viewBox="0 0 48 48" aria-hidden="true">
@@ -275,14 +189,6 @@ function SpinnerMark({ idle = false }) {
         {!idle && (
           <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="0.9s" repeatCount="indefinite" />
         )}
-=======
-function SpinnerMark() {
-  return (
-    <svg width="48" height="48" viewBox="0 0 48 48" aria-hidden="true">
-      <circle cx="24" cy="24" r="19" stroke="#26263c" strokeWidth="3" fill="none" />
-      <circle cx="24" cy="24" r="19" stroke="#8c6bff" strokeWidth="3" fill="none" strokeLinecap="round" strokeDasharray="30 90">
-        <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="0.9s" repeatCount="indefinite" />
->>>>>>> origin/main
       </circle>
     </svg>
   )
